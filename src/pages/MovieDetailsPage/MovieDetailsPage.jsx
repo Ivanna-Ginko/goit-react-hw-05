@@ -5,32 +5,33 @@ import { fetchDetails } from "../../services/api";
 
 const MovieDetailsPage =() => {
 
-    const { movieID } = useParams()
-    console.log(movieID)
+
+    const { movieId } = useParams();
+    console.log(movieId);
     const [movie, setMovie] = useState ({})
 
     useEffect (()=> {
     const getData = async () => {
-                try {
-                    const rez = await fetchDetails(movieID);
-                    console.log(rez.data)
-                    setMovie(rez.data.results);
-                } catch (error) {
-                    console.log(error);
-                }      
+            try {
+                const rez = await fetchDetails(movieId);
+                console.log(rez)
+                setMovie(rez);
+            } catch (error) {
+              console.log(error);
+              }      
             }
             getData()
             },
-        [movieID])
+        [movieId])
     return (
        <>
-        <img src='https://image.tmdb.org/t/p/w500/${movie.poster_path}' />
+        <img src='https://image.tmdb.org/t/p/w500/${movie.backdrop_path}' />
         <p>{movie.original_title}</p>
         <p>User Score {movie.vote_average}</p>
         <p>Overview</p>
         <p>{movie.overview}</p>
         <p>Genres</p>
-        <p>{movie.genre_ids}</p>
+        <p>{movie.genres}</p>
        </>
     )
 }

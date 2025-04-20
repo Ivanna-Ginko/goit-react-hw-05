@@ -12,7 +12,8 @@ const HomePage = () => {
         const getData = async () => {
             try {
                 const rez = await fetchTrend();
-                console.log(rez.data)
+                console.log(rez.data.results[0].id)
+
                 setPopular(rez.data.results);
             } catch (error) {
                 console.log(error);
@@ -29,9 +30,9 @@ const HomePage = () => {
         <>
        <h3>Trending today:</h3>
         <ul>
-          {popular.map((p)=> 
-            <li key={p.id}>
-                <Link to={p.id.toString()}>{p.original_title}</Link>
+          {popular.map((item)=> 
+            <li key={item.id}>
+                <Link to={`/movies/${item.id}`}>{item.original_title}</Link>
             </li> )
           }
         </ul>
@@ -41,4 +42,3 @@ const HomePage = () => {
 
 export default HomePage;
 
-//<li key={i}><a href=movies/{p.id} >{p.original_title}</a></li> )}
