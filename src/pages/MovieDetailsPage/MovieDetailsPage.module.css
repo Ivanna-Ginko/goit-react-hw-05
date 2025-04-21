@@ -1,0 +1,30 @@
+
+.title {
+    font-size: xx-large;
+}
+
+.text {
+    font-size: large
+}
+
+.item {
+    font-size: medium;
+}
+
+.box {
+    display: flex;
+    gap: 30px;
+    border-bottom: 4px solid rgb(79, 72, 72);
+    border-top: 4px solid rgb(79, 72, 72);
+    padding-top: 10px;
+}
+
+.link {
+    margin-left: 40px;
+    font-size: large;
+    font-weight: bold;
+}
+
+h2 {
+    padding-left: 40px;
+}

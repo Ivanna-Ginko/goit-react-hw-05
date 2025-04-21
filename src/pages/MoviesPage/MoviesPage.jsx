@@ -1,13 +1,14 @@
 import { Field, Formik, Form } from 'formik'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { fetchResults } from '../../services/api';
 import css from './moviespage.module.css'
+import MovieList from "../../components/MovieList/MovieList"
 
-const SearchBar = ( ) => {
+const MoviesPage = ( ) => {
 
+    const [search, setSearch] = useState('')
+    const [queryList, setQueryList] = useState ([]);
     
-    const [searchValues, setSearchValues] = useState('');
-
     const initialValues = {
         query: '',
     }
@@ -16,32 +17,26 @@ const SearchBar = ( ) => {
         const v = values.query.trim()
         if (!v) {
             alert('error')
-            return;
-        }
-        console.log(values);
-        getData();
-        handleChangeQuery(v)
+            return;}
+        setSearch(v);
         options.resetForm();
-       }
-    
-       const getData = async () => {
+        }
+
+    useEffect(()=>{
+        const getData= async ()=>{
         try {
-            const rez = await fetchResults(searchValues);
-            console.log(rez.data)
-            
+            const rez = await fetchResults(search)
+            setQueryList(rez.data.results)
         } catch (error) {
-            console.log(error);
-        }      
-        }
+            console.log(error)
+        }}
+        getData()
+        },[search])
 
-        const handleChangeQuery = newValue => {
-            setSearchValues(newValue);
-        }
-         
-            
-
+        
 
     return(
+        <>
         <div className={css.box}> 
         <Formik onSubmit={handleSubmit} initialValues={initialValues}>
             <Form className={css.form}>
@@ -51,7 +46,10 @@ const SearchBar = ( ) => {
             </Form>
         </Formik>
         </div>
+
+       <MovieList queryList={queryList} />
+       </>
     )
 }
 
-export default SearchBar;
+export default MoviesPage;

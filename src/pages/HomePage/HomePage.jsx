@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchTrend } from '../../services/api' 
 import { Link } from 'react-router-dom'
+import MovieList from '../../components/MovieList/MovieList'
 
 
 
@@ -23,19 +24,10 @@ const HomePage = () => {
         },
     [])
 
-
-
-
     return (
         <>
        <h3>Trending today:</h3>
-        <ul>
-          {popular.map((item)=> 
-            <li key={item.id}>
-                <Link to={`/movies/${item.id}`}>{item.original_title}</Link>
-            </li> )
-          }
-        </ul>
+        <MovieList popular={popular} />
         </>
     )
 }
