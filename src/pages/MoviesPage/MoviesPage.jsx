@@ -1,53 +1,47 @@
-import { Field, Formik, Form } from 'formik'
 import { useState, useEffect } from 'react'
 import { fetchResults } from '../../services/api';
-import css from './moviespage.module.css'
+import { useSearchParams } from "react-router-dom";
 import MovieList from "../../components/MovieList/MovieList"
+import SearchBar from '../../components/SearchBar/SearchBar';
 
-const MoviesPage = ( ) => {
-
-    const [search, setSearch] = useState('')
+const MoviesPage = () => {
+   
     const [queryList, setQueryList] = useState ([]);
-    
-    const initialValues = {
-        query: '',
-    }
-
-    const handleSubmit = (values, options) => {
-        const v = values.query.trim()
-        if (!v) {
-            alert('error')
-            return;}
-        setSearch(v);
-        options.resetForm();
-        }
+    //const [search, setSearch] = useState('')
+    const [searchParams, setSearchParams] = useSearchParams()
+    const query = searchParams.get('query') ?? '';
+      
 
     useEffect(()=>{
-        const getData= async ()=>{
+        const getData = async () => {
         try {
-            const rez = await fetchResults(search)
+            const rez = await fetchResults(query)
             setQueryList(rez.data.results)
         } catch (error) {
             console.log(error)
         }}
         getData()
-        },[search])
+    },[query])
 
-        
+        const ChangeQuery = (v) => {
+            if (!v) {
+                searchParams.delete('query')
+                return setSearchParams(searchParams);
+            }
+           // setSearch (v)
+            searchParams.set('query', v)
+            setSearchParams(searchParams)
+        }
 
     return(
         <>
-        <div className={css.box}> 
-        <Formik onSubmit={handleSubmit} initialValues={initialValues}>
-            <Form className={css.form}>
-                <Field className={css.field} name='query' placeholder='your query'/>
-                <button className={css.btn} type='submit'>Search</button>
-               
-            </Form>
-        </Formik>
-        </div>
 
-       <MovieList queryList={queryList} />
+        <SearchBar fun={ChangeQuery}/>
+       
+        {!queryList && <p>wait....</p>}
+        {queryList && 
+       <MovieList list={queryList} />
+        }
        </>
     )
 }

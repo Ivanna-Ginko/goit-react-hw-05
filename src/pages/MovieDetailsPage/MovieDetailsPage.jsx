@@ -1,14 +1,18 @@
-import { useEffect, useState } from "react";
-import { NavLink, Outlet, useParams } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { NavLink, Outlet, useParams, Link } from "react-router-dom";
 import { fetchDetails } from "../../services/api";
 import css from "./MovieDetailsPage.module.css"
-
+import { useLocation } from "react-router-dom";
 
 const MovieDetailsPage =() => {
 
     const { movieId } = useParams();
     console.log(movieId);
     const [movie, setMovie] = useState (false)
+
+    const location = useLocation()
+    console.log(location)
+    const goBackRef = useRef(location.state ?? '/movies')
 
     useEffect (()=> {
         const getData = async () => {
@@ -28,11 +32,16 @@ const MovieDetailsPage =() => {
     let pict = ''
     if(movie.data && movie.data.backdrop_path)  pict = `https://image.tmdb.org/t/p/w500`+movie.data.backdrop_path     
     
+    const defaultImg =
+`https://dl-media.viber.com/10/share/2/long/vibes/icon/image/0x0/95e0/5688fdffb84ff8bed4240bcf3ec5ac81ce591d9fa9558a3a968c630eaba195e0.jpg`;
+
+
     return (
        <>
+            <Link to={goBackRef.current}>Go back</Link>
             {!movie && <p>wait....</p>}
             {movie && <div className={css.box}>
-            {pict && <div><img className={css.img} src={pict} /></div>}
+            <div> <img className={css.img} src={movie.data.backdrop_path ? pict: defaultImg} width={250} alt="poster"/></div>
 
                 <div>
                 <p className={css.title}>{movie.data.original_title}</p>
