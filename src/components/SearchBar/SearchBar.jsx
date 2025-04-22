@@ -1,6 +1,6 @@
 import { Formik, Form, Field } from "formik"
 import css from '../../pages/MoviesPage/MoviesPage.module.css'
-//
+
 
 
 const SearchBar = ({ fun }) => {
